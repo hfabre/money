@@ -21,17 +21,19 @@ module ActiveRecord #:nodoc:
               end
               m.to_money(options[:precision])
             },
-            :constructor => lambda{ |*args| 
+            :constructor => lambda{ |*args|
               cents, currency = args
               cents ||= 0
               currency ||= ::Money.default_currency
-              ::Money.new(cents, currency, options[:precision]) 
+              ::Money.new(cents, currency, options[:precision])
             }
 
           define_method "#{name}_with_cleanup=" do |amount|
             send "#{name}_without_cleanup=", amount.blank? ? nil : amount.to_money(options[:precision])
           end
-          alias_method_chain "#{name}=", :cleanup
+
+          alias_method "#{name}_without_cleanup=", "#{name}="
+          alias_method "#{name}=", "#{name}_with_cleanup="
         end
       end
     end
