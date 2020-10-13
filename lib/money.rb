@@ -136,6 +136,10 @@ class Money
     cents.to_f / 10 ** precision
   end
 
+  def to_d
+    to_f
+  end
+
   # Recieve the amount of this money object in another currency   
   def exchange_to(other_currency)
     self.class.bank.exchange(self, other_currency)
